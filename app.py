@@ -1,8 +1,8 @@
-import sys
 import pygame
 
 from settings import Settings
 from ship import Ship
+import game_functions as gf
 
 def run_app():
     # Inits game and creates screen object
@@ -14,18 +14,8 @@ def run_app():
     
     # Running main game loop
     while True:
-        # Catching keyboard events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-
-            # Set screen background            
-            screen.fill(settings.bg_color)
-
-            # Draw ship on the screen
-            ship.blitme()
-
-            # Display the last rendered screen
-            pygame.display.flip()
+        gf.check_events(ship)
+        gf.update_screen(settings, screen, ship)
+        ship.update()
 
 run_app()
