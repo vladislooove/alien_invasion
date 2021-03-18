@@ -17,8 +17,8 @@ def run_app():
     # Running main game loop
     while True:
         gf.check_events(settings, screen, ship, bullets)
-        gf.update_screen(settings, screen, ship, bullets)
         ship.update()
-        bullets.update()
+        gf.update_screen(settings, screen, ship, bullets)
+        gf.update_bullets(bullets)
 
 run_app()
