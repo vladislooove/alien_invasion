@@ -2,8 +2,8 @@ class Settings():
     def __init__(self):
         # Init game settings
         # Screen params
-        self.screen_width = 1200
-        self.screen_height = 800
+        self.screen_width = 1400
+        self.screen_height = 830
         self.bg_color = (80, 38, 56)
 
         # Bullet params
