@@ -1,7 +1,9 @@
 import sys
 import pygame
+from random import randint
 from bullet import Bullet
 from alien import Alien
+from star import Star
 
 def check_events(settings, screen, ship, bullets):
     # Catching keyboard events
@@ -30,7 +32,7 @@ def check_key_up_events(event, ship):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
 
-def update_screen(settings, screen, ship, bullets, aliens):
+def update_screen(settings, screen, ship, bullets, aliens, stars):
     # Set screen background            
     screen.fill(settings.bg_color)
 
@@ -39,6 +41,9 @@ def update_screen(settings, screen, ship, bullets, aliens):
 
     # Draw aliens on the screen
     aliens.draw(screen)
+
+    # Draw stars on the screen
+    stars.draw(screen)
 
     # Update all bullets position
     for bullet in bullets.sprites():
@@ -87,3 +92,13 @@ def create_fleet(settings, screen, aliens, ship):
     for row_index in range(number_rows):
         for index in range(number_aliens_x):
             create_alien(settings, screen, aliens, index, row_index)
+
+def create_stars(settings, screen, stars):
+    for index in range(30):
+        star = Star(settings, screen)
+        x = randint(0, settings.screen_width)
+        y = randint(0, settings.screen_height)
+        star.x = x
+        star.rect.x = x
+        star.rect.y = y
+        stars.add(star)
