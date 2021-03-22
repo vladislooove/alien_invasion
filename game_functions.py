@@ -68,14 +68,22 @@ def get_aliens_number_x(settings, screen):
     available_space_x = settings.screen_width - alien_width
     return int(available_space_x / alien_width)
 
-def create_alien(settings, screen, aliens, index):
+def get_number_rows(settings, ship_height, alien_height):
+    available_space_y = settings.screen_height - alien_height - ship_height
+    return int(available_space_y / (1.5 * alien_height))
+
+def create_alien(settings, screen, aliens, index, row_number):
     alien = Alien(settings, screen)
     alien.x = alien.rect.width + 0 if index == 0 else 1 * alien.rect.width * index
     alien.rect.x = alien.x
+    alien.rect.y = alien.rect.height + 1 * alien.rect.height * row_number
     aliens.add(alien)
 
-def create_fleet(settings, screen, aliens):
+def create_fleet(settings, screen, aliens, ship):
+    alien = Alien(settings, screen)
     number_aliens_x = get_aliens_number_x(settings, screen)
+    number_rows = get_number_rows(settings, ship.rect.height, alien.rect.height)
 
-    for index in range(number_aliens_x):
-        create_alien(settings, screen, aliens, index)
+    for row_index in range(number_rows):
+        for index in range(number_aliens_x):
+            create_alien(settings, screen, aliens, index, row_index)
