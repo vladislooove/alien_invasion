@@ -4,6 +4,7 @@ from random import randint
 from bullet import Bullet
 from alien import Alien
 from star import Star
+from time import sleep
 
 def check_events(settings, screen, ship, bullets):
     # Catching keyboard events
@@ -52,7 +53,7 @@ def update_screen(settings, screen, ship, bullets, aliens, stars):
     # Display the last rendered screen
     pygame.display.flip()
 
-def update_bullets(bullets):
+def update_bullets(bullets, aliens, settings, screen, ship):
     # Update bullets position
     bullets.update()
 
@@ -60,6 +61,15 @@ def update_bullets(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+    check_bullet_alien_collisions(settings, screen, ship, aliens, bullets)
+
+def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if len(aliens) == 0:
+        bullets.empty()
+        create_fleet(settings, screen, aliens, ship)
 
 def check_fleet_edges(settings, aliens):
     for alien in aliens.sprites():
@@ -73,9 +83,12 @@ def change_fleet_direction(settings, aliens):
 
     settings.fleet_direction *= -1
 
-def update_aliens(settings, aliens):
+def update_aliens(settings, aliens, ship, stats):
     check_fleet_edges(settings, aliens)
     aliens.update()
+
+    if pygame.sprite.spritecollideany(ship, aliens):
+        print("Ship hit!!!")
 
 def fire_bullet(settings, screen, ship, bullets):
     new_bullet = Bullet(settings, screen, ship)
