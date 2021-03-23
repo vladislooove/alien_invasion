@@ -31,19 +31,19 @@ def check_key_up_events(event, ship):
         ship.moving_right = False
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
-
+    
 def update_screen(settings, screen, ship, bullets, aliens, stars):
     # Set screen background            
     screen.fill(settings.bg_color)
+
+    # Draw stars on the screen
+    stars.draw(screen)
 
     # Draw ship on the screen
     ship.blitme()
 
     # Draw aliens on the screen
     aliens.draw(screen)
-
-    # Draw stars on the screen
-    stars.draw(screen)
 
     # Update all bullets position
     for bullet in bullets.sprites():
@@ -60,6 +60,22 @@ def update_bullets(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+def check_fleet_edges(settings, aliens):
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(settings, aliens)
+            break
+
+def change_fleet_direction(settings, aliens):
+    for alien in aliens.sprites():
+        alien.rect.y += settings.fleet_drop_speed
+
+    settings.fleet_direction *= -1
+
+def update_aliens(settings, aliens):
+    check_fleet_edges(settings, aliens)
+    aliens.update()
 
 def fire_bullet(settings, screen, ship, bullets):
     new_bullet = Bullet(settings, screen, ship)
