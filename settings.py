@@ -7,7 +7,7 @@ class Settings():
         self.bg_color = (80, 38, 56)
         
         # Ship params
-        self.ship_limit = 3
+        self.ships_limit = 3
         self.ship_speed_factor = 3
 
         # Bullet params
@@ -18,8 +18,8 @@ class Settings():
         self.bullets_allowed = 5
 
         # Alien params
-        self.alien_speed_factor = 10
-        self.fleet_drop_speed = 20
+        self.alien_speed_factor = 1
+        self.fleet_drop_speed = 5
 
         # 1 == Right, -1 == Left
         self.fleet_direction = 1
