@@ -6,7 +6,7 @@ from alien import Alien
 from star import Star
 from time import sleep
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, ship, bullets, stats, btn):
     # Catching keyboard events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -16,6 +16,12 @@ def check_events(settings, screen, ship, bullets):
             check_key_down_events(event, settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:
             check_key_up_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            
+            if btn.rect.collidepoint(mouse_x, mouse_y):
+                stats.is_game_active = True
+
 
 def check_key_down_events(event, settings, screen, ship, bullets):
     if event.key == pygame.K_RIGHT:
@@ -33,22 +39,25 @@ def check_key_up_events(event, ship):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
     
-def update_screen(settings, screen, ship, bullets, aliens, stars):
-    # Set screen background            
-    screen.fill(settings.bg_color)
+def update_screen(settings, screen, ship, bullets, aliens, stars, stats, btn):
+    if stats.is_game_active:
+        # Set screen background            
+        screen.fill(settings.bg_color)
 
-    # Draw stars on the screen
-    stars.draw(screen)
+        # Draw stars on the screen
+        stars.draw(screen)
 
-    # Draw ship on the screen
-    ship.blitme()
+        # Draw ship on the screen
+        ship.blitme()
 
-    # Draw aliens on the screen
-    aliens.draw(screen)
+        # Draw aliens on the screen
+        aliens.draw(screen)
 
-    # Update all bullets position
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
+        # Update all bullets position
+        for bullet in bullets.sprites():
+            bullet.draw_bullet()
+    else:
+        btn.draw_button()
 
     # Display the last rendered screen
     pygame.display.flip()

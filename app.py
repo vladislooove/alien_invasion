@@ -5,6 +5,7 @@ from ship import Ship
 from game_stats import GameStats
 import game_functions as gf
 from pygame.sprite import Group
+from button import Button
 
 def run_app():
     # Inits game and creates screen object
@@ -18,12 +19,13 @@ def run_app():
     stats = GameStats(settings)
     gf.create_fleet(settings, screen, aliens, ship)
     gf.create_stars(settings, screen, stars)
-    pygame.display.set_caption("Alien Invasion") 
+    pygame.display.set_caption("Alien Invasion")
+    btn = Button(settings, screen, "Play")
     
     # Running main game loop
     while True:
-        gf.check_events(settings, screen, ship, bullets)
-        gf.update_screen(settings, screen, ship, bullets, aliens, stars)
+        gf.check_events(settings, screen, ship, bullets, stats, btn)
+        gf.update_screen(settings, screen, ship, bullets, aliens, stars, stats, btn)
 
         if stats.is_game_active:
             ship.update()
