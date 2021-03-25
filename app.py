@@ -24,7 +24,7 @@ def run_app():
     
     # Running main game loop
     while True:
-        gf.check_events(settings, screen, ship, bullets, stats, btn)
+        gf.check_events(settings, screen, ship, bullets, stats, btn, aliens)
         gf.update_screen(settings, screen, ship, bullets, aliens, stars, stats, btn)
 
         if stats.is_game_active:

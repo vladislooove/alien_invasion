@@ -6,24 +6,32 @@ from alien import Alien
 from star import Star
 from time import sleep
 
-def check_events(settings, screen, ship, bullets, stats, btn):
+def check_events(settings, screen, ship, bullets, stats, btn, aliens):
     # Catching keyboard events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_key_down_events(event, settings, screen, ship, bullets)
+            check_key_down_events(event, settings, screen, ship, bullets, aliens, stats)
         elif event.type == pygame.KEYUP:
             check_key_up_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             
-            if btn.rect.collidepoint(mouse_x, mouse_y):
-                stats.is_game_active = True
+            if btn.rect.collidepoint(mouse_x, mouse_y) and not stats.is_game_active:
+                start_game(settings, screen, aliens, bullets, stats, ship)
 
+def start_game(settings, screen, aliens, bullets, stats, ship):
+    pygame.mouse.set_visible(False)
+    stats.reset_stats()
+    bullets.empty()
+    aliens.empty()
+    ship.center_ship()
+    create_fleet(settings, screen, aliens, ship)
+    stats.is_game_active = True
 
-def check_key_down_events(event, settings, screen, ship, bullets):
+def check_key_down_events(event, settings, screen, ship, bullets, aliens, stats):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
@@ -32,6 +40,8 @@ def check_key_down_events(event, settings, screen, ship, bullets):
         fire_bullet(settings, screen, ship, bullets)
     elif event.key == pygame.K_ESCAPE:
         sys.exit()
+    elif event.key == pygame.K_p:
+        start_game(settings, screen, aliens, bullets, stats, ship)
 
 def check_key_up_events(event, ship):
     if event.key == pygame.K_RIGHT:
@@ -114,6 +124,7 @@ def handle_ship_hit(settings, screen, aliens, bullets, ship, stats):
         sleep(0.5)
     else:
         stats.is_game_active = False
+        pygame.mouse.set_visible(True)
 
 def fire_bullet(settings, screen, ship, bullets):
     new_bullet = Bullet(settings, screen, ship)
