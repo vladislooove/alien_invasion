@@ -23,6 +23,7 @@ def check_events(settings, screen, ship, bullets, stats, btn, aliens):
                 start_game(settings, screen, aliens, bullets, stats, ship)
 
 def start_game(settings, screen, aliens, bullets, stats, ship):
+    settings.reset_settings()
     pygame.mouse.set_visible(False)
     stats.reset_stats()
     bullets.empty()
@@ -87,6 +88,10 @@ def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if len(aliens) == 0:
+        settings.alien_speed_factor += 1
+        settings.fleet_drop_speed += 1
+        settings.ship_speed_factor += 1
+        settings.bullet_speed_factor += 1
         bullets.empty()
         create_fleet(settings, screen, aliens, ship)
 
